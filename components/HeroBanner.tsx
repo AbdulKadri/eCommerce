@@ -1,24 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-
-type HeroBannerType = {
-  _id: string;
-  _createdAt: string;
-  _updatedAt: string;
-  image: string;
-  buttonText: string;
-  product: string;
-  desc: string;
-  smallText: string;
-  midText: string;
-  largeText1: string;
-  largeText2: string;
-  discount: string;
-  saleTime: string;
-};
+import { Banner } from "../types/Banner";
 
 type Props = {
-  heroBanner: HeroBannerType[] | null;
+  heroBanner: Banner[] | null;
 };
 
 const HeroBanner = ({ heroBanner }: Props) => {
