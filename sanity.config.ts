@@ -3,7 +3,7 @@ import { deskTool } from "sanity/desk";
 import schemas from "./sanity/schemas";
 
 export default defineConfig({
-  basePath: "/studio",
+  basePath: "/admin",
   projectId: "ic8uro0v",
   title: "eCommerce Sanity Studio",
   dataset: "production",
