@@ -1,7 +1,11 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { getProduct } from "@/sanity/lib/client-product";
 import { getProducts } from "@/sanity/lib/client-product";
 import { PortableText } from "@portabletext/react";
+import { Product } from "@/types/Product";
 import {
   AiOutlineMinus,
   AiOutlinePlus,
@@ -14,10 +18,30 @@ type Props = {
   params: { product: string };
 };
 
-const ProductDetails = async ({ params }: Props) => {
-  const slug = params.product;
-  const product = await getProduct(slug);
-  const products = await getProducts();
+const ProductDetails = ({ params }: Props) => {
+  const [index, setIndex] = useState(0);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const fetchProductData = async () => {
+      const slug = params.product;
+      const [productData, productsData] = await Promise.all([
+        getProduct(slug),
+        getProducts(),
+      ]);
+
+      setProduct(productData);
+      setProducts(productsData);
+    };
+
+    fetchProductData();
+  }, [params.product]);
+
+  if (!product || products.length === 0) {
+    return <div>Loading...</div>;
+  }
+
   const { name, price, images, details } = product;
 
   return (
@@ -26,18 +50,28 @@ const ProductDetails = async ({ params }: Props) => {
         <div>
           <div className="image-container">
             <Image
-              src={images[0]}
+              src={images[index]}
               alt={name}
               width={600}
               height={600}
               className="product-detail-image"
             />
           </div>
-          {/* <div className="small-images-container">
-            {images?.map((image, index) => (
-              <Image key={index} src={image} alt={name} width={100} height={100} />
+          <div className="small-images-container">
+            {images?.map((image, i) => (
+              <Image
+                key={i}
+                src={image}
+                alt={name}
+                width={100}
+                height={100}
+                onMouseEnter={() => setIndex(i)}
+                className={
+                  i === index ? "small-image selected-image" : "small-image"
+                }
+              />
             ))}
-          </div> */}
+          </div>
         </div>
 
         <div className="product-detail-desc">
