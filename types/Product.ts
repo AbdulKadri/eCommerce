@@ -4,7 +4,7 @@ export type Product = {
   _id: string;
   _createdAt: string;
   _updatedAt: string;
-  image: string;
+  images: string[];
   name: string;
   slug: string;
   price: number;
