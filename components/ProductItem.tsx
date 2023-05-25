@@ -7,21 +7,21 @@ type Props = {
 };
 
 export const ProductItem = ({ productItem }: Props) => {
+  const { name, price, images, slug } = productItem;
+
   return (
-    <div>
-      <Link href={`/product/${productItem.slug}`}>
-        <div className="product-card">
-          <Image
-            src={productItem.images[0]}
-            alt={`${productItem.name} image`}
-            width={250}
-            height={250}
-            className="product-image"
-          />
-          <p className="product-name">{productItem.name}</p>
-          <p className="product-price">${productItem.price}</p>
-        </div>
-      </Link>
-    </div>
+    <Link href={`/product/${slug}`}>
+      <div className="product-card">
+        <Image
+          src={images[0]}
+          alt={`${name} image`}
+          width={250}
+          height={250}
+          className="product-image"
+        />
+        <p className="product-name">{name}</p>
+        <p className="product-price">${price}</p>
+      </div>
+    </Link>
   );
 };
