@@ -20,7 +20,7 @@ const HeroBanner = ({ heroBanner }: Props) => {
             <h3>{banner.midText}</h3>
             <h1>{banner.largeText1}</h1>
             <Image
-              src={banner.image}
+              src={banner.images[0]}
               alt="headphones"
               width={500}
               height={500}
