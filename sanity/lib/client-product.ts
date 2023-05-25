@@ -23,7 +23,7 @@ export async function getProduct(slug: string): Promise<Product> {
             _id,
             _createdAt,
             _updatedAt,
-            "image": images[].asset->url,
+            "images": images[].asset->url,
             name,
             "slug": slug.current,
             price,
