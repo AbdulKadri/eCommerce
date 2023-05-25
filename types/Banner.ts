@@ -2,7 +2,7 @@ export type Banner = {
   _id: string;
   _createdAt: string;
   _updatedAt: string;
-  image: string;
+  images: string[];
   buttonText: string;
   product: string;
   desc: string;

@@ -8,7 +8,7 @@ export async function getBanners(): Promise<Banner[]> {
                 _id,
                 _createdAt,
                 _updatedAt,
-                "image": image.asset->url,
+                "images": images[].asset->url,
                 buttonText,
                 product,
                 desc,
