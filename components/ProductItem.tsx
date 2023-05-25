@@ -11,16 +11,13 @@ export const ProductItem = ({ productItem }: Props) => {
     <div>
       <Link href={`/product/${productItem.slug}`}>
         <div className="product-card">
-          {productItem.images?.map((image, index) => (
-            <Image
-              key={index}
-              src={image}
-              alt={`${productItem.name} image ${index + 1}`}
-              width={250}
-              height={250}
-              className="product-image"
-            />
-          ))}
+          <Image
+            src={productItem.images[0]}
+            alt={`${productItem.name} image`}
+            width={250}
+            height={250}
+            className="product-image"
+          />
           <p className="product-name">{productItem.name}</p>
           <p className="product-price">${productItem.price}</p>
         </div>
