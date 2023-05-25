@@ -23,7 +23,7 @@ const Home = async () => {
         ))}
       </div>
 
-      <FooterBanner />
+      <FooterBanner footerBanner={banners && banners[0]} />
     </>
   );
 };
