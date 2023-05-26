@@ -13,6 +13,7 @@ import {
   AiOutlineStar,
 } from "react-icons/ai";
 import { ProductItem } from "@/components/ProductItem";
+import { useStateContext } from "@/context/StateContext";
 
 type Props = {
   params: { product: string };
@@ -22,6 +23,7 @@ const ProductDetails = ({ params }: Props) => {
   const [index, setIndex] = useState(0);
   const [product, setProduct] = useState<Product | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
+  const { qty, incQty, decQty, onAdd, resetQty } = useStateContext();
 
   useEffect(() => {
     const fetchProductData = async () => {
@@ -36,6 +38,7 @@ const ProductDetails = ({ params }: Props) => {
     };
 
     fetchProductData();
+    resetQty();
   }, [params.product]);
 
   if (!product || products.length === 0) {
@@ -92,17 +95,21 @@ const ProductDetails = ({ params }: Props) => {
           <div className="quantity">
             <h3>Quantity:</h3>
             <p className="quantity-desc">
-              <span className="minus">
+              <span className="minus" onClick={decQty}>
                 <AiOutlineMinus />
               </span>
-              <span className="num">0</span>
-              <span className="plus">
+              <span className="num">{qty}</span>
+              <span className="plus" onClick={incQty}>
                 <AiOutlinePlus />
               </span>
             </p>
           </div>
           <div className="buttons">
-            <button type="button" className="add-to-cart">
+            <button
+              type="button"
+              onClick={() => onAdd(product, qty)}
+              className="add-to-cart"
+            >
               Add to Cart
             </button>
             <button type="button" className="buy-now">
