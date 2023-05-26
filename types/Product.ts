@@ -9,4 +9,5 @@ export type Product = {
   slug: string;
   price: number;
   details: PortableTextBlock[];
+  quantity: number;
 };
