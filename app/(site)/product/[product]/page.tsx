@@ -14,6 +14,7 @@ import {
 } from "react-icons/ai";
 import { ProductItem } from "@/components/ProductItem";
 import { useStateContext } from "@/context/StateContext";
+import Loading from "../../loading";
 
 type Props = {
   params: { product: string };
@@ -23,7 +24,8 @@ const ProductDetails = ({ params }: Props) => {
   const [index, setIndex] = useState(0);
   const [product, setProduct] = useState<Product | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
-  const { qty, incQty, decQty, onAdd, resetQty } = useStateContext();
+  const { qty, incQty, decQty, onAdd, resetQty, setShowCart } =
+    useStateContext();
 
   useEffect(() => {
     const fetchProductData = async () => {
@@ -42,8 +44,13 @@ const ProductDetails = ({ params }: Props) => {
   }, [params.product]);
 
   if (!product || products.length === 0) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
+
+  const handleBuyNow = () => {
+    onAdd(product, qty);
+    setShowCart(true);
+  };
 
   const { name, price, images, details } = product;
 
@@ -112,7 +119,7 @@ const ProductDetails = ({ params }: Props) => {
             >
               Add to Cart
             </button>
-            <button type="button" className="buy-now">
+            <button type="button" onClick={handleBuyNow} className="buy-now">
               Buy Now
             </button>
           </div>
