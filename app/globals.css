@@ -612,6 +612,25 @@ span.text-red {
   margin-top: 10px;
 }
 
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: #fff;
+}
+
+.loading-spinner {
+  animation: spinner 2s linear infinite;
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @media screen and (max-width: 800px) {
   .hero-banner-container {
     height: 560px;
