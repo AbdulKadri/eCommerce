@@ -8,8 +8,11 @@ type CartContextType = {
   showCart: boolean;
   setShowCart: (showCart: boolean) => void;
   cartItems: Product[];
+  setCartItems: (cartItems: Product[]) => void;
   totalPrice: number;
+  setTotalPrice: (totalPrice: number) => void;
   totalQuantities: number;
+  setTotalQuantities: (totalQuantities: number) => void;
   qty: number;
   incQty: () => void;
   decQty: () => void;
@@ -23,8 +26,11 @@ const defaultContext: CartContextType = {
   showCart: false,
   setShowCart: () => {},
   cartItems: [],
+  setCartItems: () => {},
   totalPrice: 0,
+  setTotalPrice: () => {},
   totalQuantities: 0,
+  setTotalQuantities: () => {},
   qty: 1,
   incQty: () => {},
   decQty: () => {},
@@ -130,8 +136,11 @@ export const StateContext = ({ children }: { children: React.ReactNode }) => {
         showCart,
         setShowCart,
         cartItems,
+        setCartItems,
         totalPrice,
+        setTotalPrice,
         totalQuantities,
+        setTotalQuantities,
         qty,
         incQty,
         decQty,
