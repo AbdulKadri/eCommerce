@@ -10,8 +10,7 @@ import {
 import { TiDeleteOutline } from "react-icons/ti";
 import toast from "react-hot-toast";
 import { useStateContext } from "@/context/StateContext";
-import { NextResponse } from "next/server";
-import getStripe from "@/sanity/lib/getStripe";
+import getStripe from "@/utils/get-stripejs";
 import axios from "axios";
 
 const Cart = () => {
@@ -44,16 +43,10 @@ const Cart = () => {
       }
     );
 
-    if (data.response.status === 500) {
-      toast.error("Something went wrong");
+    if (!data) {
+      toast.error("Something went wrong. Please try again later.");
       return;
     }
-
-    // if (!response.ok) {
-    //   console.error("HTTP Status:", response.status);
-    //   console.error("Response body:", await response.text());
-    //   throw new Error("Server response was not ok");
-    // }
 
     toast.loading("Redirecting...");
     stripe.redirectToCheckout({ sessionId: data.id });
