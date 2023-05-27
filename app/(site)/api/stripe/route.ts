@@ -46,8 +46,8 @@ export async function POST(req: NextRequest): Promise<NextResponse | string> {
           quantity: item.quantity,
         };
       }),
-      success_url: `http://localhost:3000/success`,
-      cancel_url: `http://localhost:3000`,
+      success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/success`,
+      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}`,
     });
     return NextResponse.json(session);
   } catch (error: unknown) {
