@@ -1,44 +1,59 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import { Product } from "@/types/Product";
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest): Promise<NextResponse | string> {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
     apiVersion: "2022-11-15",
   });
 
-  let data = await req.json();
-  console.log(data);
-
-  // return NextResponse.redirect(
-  //   "https://checkout.stripe.com/pay/cs_test_a1Y7Z1ZQZQ2ZQ2ZQ2ZQ2ZQ2ZQ2&uid=1234"
-  // );
+  const data = await req.json();
+  let cartItems = data.cartItems;
 
   try {
     // Create Checkout Sessions from body params.
     const session = await stripe.checkout.sessions.create({
       submit_type: "pay",
+      mode: "payment",
       payment_method_types: ["card"],
       billing_address_collection: "auto",
       shipping_options: [
         { shipping_rate: "shr_1NBuEzLgXwjjTLxO4XRaxxOh" },
         { shipping_rate: "shr_1NBuG4LgXwjjTLxOQofGz9KY" },
       ],
-      line_items: [
-        {
-          // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-          price: "{{PRICE_ID}}",
-          quantity: 1,
-        },
-      ],
-      mode: "payment",
-      success_url: `${req.headers}/?success=true`,
-      cancel_url: `${req.headers}/?canceled=true`,
+      line_items: cartItems.map((item: Product) => {
+        const img = item.images[0];
+        const newImage = img
+          .replace(
+            "image-",
+            "https://cdn.sanity.io/images/ic8uro0v/production/"
+          )
+          .replace("-webp", ".webp");
+
+        return {
+          price_data: {
+            currency: "cad",
+            product_data: {
+              name: item.name,
+              images: [newImage],
+            },
+            unit_amount: item.price * 100,
+          },
+          adjustable_quantity: {
+            enabled: true,
+            minimum: 1,
+          },
+          quantity: item.quantity,
+        };
+      }),
+      success_url: `http://localhost:3000`,
+      cancel_url: `http://localhost:3000`,
     });
-    // res.redirect(303, session.url);
+    return NextResponse.json(session);
   } catch (error: unknown) {
     const message =
       error instanceof Error ? error.message : "Unknown error occurred";
     console.log(message);
+    return message;
   }
 }
