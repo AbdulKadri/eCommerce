@@ -10,6 +10,9 @@ import {
 import { TiDeleteOutline } from "react-icons/ti";
 import toast from "react-hot-toast";
 import { useStateContext } from "@/context/StateContext";
+import { NextResponse } from "next/server";
+import getStripe from "@/sanity/lib/getStripe";
+import axios from "axios";
 
 const Cart = () => {
   const cartRef = useRef(null);
@@ -21,6 +24,40 @@ const Cart = () => {
     setShowCart,
     toggleCartItemQuantity,
   } = useStateContext();
+
+  const handleCheckout = async () => {
+    const stripe = await getStripe();
+
+    if (!stripe) {
+      toast.error("Stripe failed to initialize. Please try again later.");
+      return;
+    }
+
+    console.log("cartItems", cartItems);
+    const { data } = await axios.post(
+      "/api/stripe",
+      {
+        cartItems: cartItems,
+      },
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+
+    if (data.response.status === 500) {
+      toast.error("Something went wrong");
+      return;
+    }
+
+    // if (!response.ok) {
+    //   console.error("HTTP Status:", response.status);
+    //   console.error("Response body:", await response.text());
+    //   throw new Error("Server response was not ok");
+    // }
+
+    toast.loading("Redirecting...");
+    stripe.redirectToCheckout({ sessionId: data.id });
+  };
 
   return (
     <div className="cart-wrapper" ref={cartRef}>
@@ -109,7 +146,7 @@ const Cart = () => {
               <h3>${totalPrice}</h3>
             </div>
             <div className="btn-container">
-              <button type="button" className="btn">
+              <button type="button" className="btn" onClick={handleCheckout}>
                 Pay with Stripe
               </button>
             </div>
